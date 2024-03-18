@@ -3,19 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizations</title>
+    <title>Visualization Homework</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4g2v6nXvL5qUpHhwN+xg2Fp4Uqz6Gga4xs6tn9" crossorigin="anonymous">
+    <!-- Vega Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    <div id="donutChart"></div>
-    <div id="correlationView"></div>
-    <div id="streamgraph"></div>
-    <div id="histogram"></div>
+    <div class="container">
+        <h1 class="text-center my-4">Visualization Homework</h1>
 
+        <!-- Question 1: Donut Chart -->
+        <section id="question1">
+            <h2>Question 1: Donut Chart showing Rep and Total</h2>
+            <div id="donutChart"></div>
+        </section>
+
+        <!-- Question 2: Correlation View -->
+        <section id="question2">
+            <h2>Question 2: Correlation between Units and Unit Cost</h2>
+            <div id="correlationView"></div>
+        </section>
+
+        <!-- Question 3: Streamgraph -->
+        <section id="question3">
+            <h2>Question 3: Streamgraph for Total variation over time for each Item</h2>
+            <div id="streamgraph"></div>
+        </section>
+
+        <!-- Question 4: Histogram -->
+        <section id="question4">
+            <h2>Question 4: Histogram of Units with Global Mean Overlay</h2>
+            <div id="histogram"></div>
+        </section>
+    </div>
+
+    <!-- Bootstrap JS Bundle (popper.js included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <!-- Vega-Lite Spec and Embedding -->
     <script>
-        // Donut Chart
+        // Question 1: Donut Chart
         const donutChartSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
@@ -29,7 +59,7 @@
         };
         vegaEmbed('#donutChart', donutChartSpec);
 
-        // Correlation View
+        // Question 2: Correlation View
         const correlationViewSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
@@ -46,7 +76,7 @@
         };
         vegaEmbed('#correlationView', correlationViewSpec);
 
-        // Streamgraph
+        // Question 3: Streamgraph
         const streamgraphSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
@@ -61,7 +91,7 @@
         };
         vegaEmbed('#streamgraph', streamgraphSpec);
 
-        // Histogram
+        // Question 4: Histogram
         const histogramSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
