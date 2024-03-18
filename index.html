@@ -3,94 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizations</title>
+    <title>Data Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    <h1>Visualizations</h1>
+    <!-- Section 1: Donut Chart -->
+    <div id="donut-chart"></div>
 
-    <!-- Donut Chart showing Rep and Total -->
-    <div id="donutChart"></div>
+    <!-- Section 2: Correlation View with Rectangular Brush -->
+    <div id="correlation-view"></div>
 
-    <!-- View showing the correlation between Units and Unit Cost with Rectangular Brush -->
-    <div id="correlationView"></div>
-
-    <!-- Streamgraph showing how the Total varied over time for each Item -->
+    <!-- Section 3: Streamgraph -->
     <div id="streamgraph"></div>
 
-    <!-- Histogram of the Units with an overlay of the global mean -->
+    <!-- Section 4: Histogram with Global Mean Overlay -->
     <div id="histogram"></div>
 
     <script>
-        // Import dataset
-        const data = vegaLite.readXLSX("HW_III.xlsx");
-
-        // Donut Chart showing Rep and Total
-        const donutChartSpec = {
+        // Load data from Excel file
+        vegaEmbed("#donut-chart", {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": data,
+            "data": {
+                "url": "https://github.com/proadhikary/vega-lite-assignment/blob/main/HW_III.xlsx"
+            },
             "mark": {"type": "arc", "innerRadius": 50},
             "encoding": {
                 "theta": {"field": "Total", "type": "quantitative", "stack": true},
                 "color": {"field": "Rep", "type": "nominal"}
             }
-        };
-        vegaEmbed('#donutChart', donutChartSpec);
+        });
 
-        // View showing the correlation between Units and Unit Cost with Rectangular Brush
-        const correlationViewSpec = {
+        vegaEmbed("#correlation-view", {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": data,
-            "mark": "point",
-            "encoding": {
-                "x": {"field": "Units", "type": "quantitative"},
-                "y": {"field": "Unit Cost", "type": "quantitative"},
-                "color": {"field": "Item", "type": "nominal"}
+            "data": {
+                "url": "HW_III.xlsx"
             },
+            "mark": "point",
             "selection": {
                 "brush": {"type": "interval", "encodings": ["x"]}
+            },
+            "encoding": {
+                "x": {"field": "Units", "type": "quantitative"},
+                "y": {"field": "Unit Cost", "type": "quantitative"}
             }
-        };
-        vegaEmbed('#correlationView', correlationViewSpec);
+        });
 
-        // Streamgraph showing how the Total varied over time for each Item
-        const streamgraphSpec = {
+        vegaEmbed("#streamgraph", {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": data,
-            "mark": "area",
+            "data": {
+                "url": "HW_III.xlsx"
+            },
+            "mark": {"type": "area", "interpolate": "monotone"},
             "encoding": {
                 "x": {"field": "OrderDate", "type": "temporal"},
                 "y": {"field": "Total", "type": "quantitative"},
-                "color": {"field": "Item", "type": "nominal"},
-                "order": {"field": "OrderDate", "type": "temporal"}
+                "color": {"field": "Item", "type": "nominal"}
             }
-        };
-        vegaEmbed('#streamgraph', streamgraphSpec);
+        });
 
-        // Histogram of the Units with an overlay of the global mean
-        const histogramSpec = {
+        vegaEmbed("#histogram", {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": data,
+            "data": {
+                "url": "HW_III.xlsx"
+            },
             "mark": "bar",
             "encoding": {
                 "x": {"field": "Units", "type": "quantitative", "bin": true},
-                "y": {"field": "count()", "type": "quantitative"},
-                "color": {"value": "steelblue"}
+                "y": {"field": "count()", "type": "quantitative"}
             },
             "layer": [
                 {
                     "mark": "rule",
                     "encoding": {
-                        "y": {"aggregate": "mean", "field": "Units", "type": "quantitative"},
+                        "y": {"value": 0},
+                        "y2": {"field": "mean(Units)", "type": "quantitative"},
                         "color": {"value": "red"}
                     }
                 }
             ]
-        };
-        vegaEmbed('#histogram', histogramSpec);
+        });
     </script>
 </body>
 </html>
-
