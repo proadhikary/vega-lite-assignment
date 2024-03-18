@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizations</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <h1>Visualizations</h1>
+
+    <!-- Donut Chart showing Rep and Total -->
+    <div id="donutChart"></div>
+
+    <!-- View showing the correlation between Units and Unit Cost with Rectangular Brush -->
+    <div id="correlationView"></div>
+
+    <!-- Streamgraph showing how the Total varied over time for each Item -->
+    <div id="streamgraph"></div>
+
+    <!-- Histogram of the Units with an overlay of the global mean -->
+    <div id="histogram"></div>
+
+    <script>
+        // Import dataset
+        const data = vegaLite.readXLSX("HW_III.xlsx");
+
+        // Donut Chart showing Rep and Total
+        const donutChartSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": data,
+            "mark": {"type": "arc", "innerRadius": 50},
+            "encoding": {
+                "theta": {"field": "Total", "type": "quantitative", "stack": true},
+                "color": {"field": "Rep", "type": "nominal"}
+            }
+        };
+        vegaEmbed('#donutChart', donutChartSpec);
+
+        // View showing the correlation between Units and Unit Cost with Rectangular Brush
+        const correlationViewSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": data,
+            "mark": "point",
+            "encoding": {
+                "x": {"field": "Units", "type": "quantitative"},
+                "y": {"field": "Unit Cost", "type": "quantitative"},
+                "color": {"field": "Item", "type": "nominal"}
+            },
+            "selection": {
+                "brush": {"type": "interval", "encodings": ["x"]}
+            }
+        };
+        vegaEmbed('#correlationView', correlationViewSpec);
+
+        // Streamgraph showing how the Total varied over time for each Item
+        const streamgraphSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": data,
+            "mark": "area",
+            "encoding": {
+                "x": {"field": "OrderDate", "type": "temporal"},
+                "y": {"field": "Total", "type": "quantitative"},
+                "color": {"field": "Item", "type": "nominal"},
+                "order": {"field": "OrderDate", "type": "temporal"}
+            }
+        };
+        vegaEmbed('#streamgraph', streamgraphSpec);
+
+        // Histogram of the Units with an overlay of the global mean
+        const histogramSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": data,
+            "mark": "bar",
+            "encoding": {
+                "x": {"field": "Units", "type": "quantitative", "bin": true},
+                "y": {"field": "count()", "type": "quantitative"},
+                "color": {"value": "steelblue"}
+            },
+            "layer": [
+                {
+                    "mark": "rule",
+                    "encoding": {
+                        "y": {"aggregate": "mean", "field": "Units", "type": "quantitative"},
+                        "color": {"value": "red"}
+                    }
+                }
+            ]
+        };
+        vegaEmbed('#histogram', histogramSpec);
+    </script>
+</body>
+</html>
+
