@@ -3,87 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Visualization</title>
+    <title>Visualizations</title>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    Section 1: Donut Chart
-    <div id="donut-chart"></div>
-
-    Section 2: Correlation View with Rectangular Brush
-    <div id="correlation-view"></div>
-
-    Section 3: Streamgraph
+    <div id="donutChart"></div>
+    <div id="correlationView"></div>
     <div id="streamgraph"></div>
-
-    Section 4: Histogram with Global Mean Overlay
     <div id="histogram"></div>
 
     <script>
-        // Load data from Excel file
-        vegaEmbed("#donut-chart", {
+        // Donut Chart
+        const donutChartSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
-                "url": "https://raw.githubusercontent.com/proadhikary/vega-lite-assignment/main/HW_III.csv"
+                "url": "HW_III.csv"
             },
-            "mark": {"type": "arc", "innerRadius": 50},
+            "mark": "arc",
             "encoding": {
-                "theta": {"field": "Total", "type": "quantitative", "stack": true},
+                "theta": {"field": "Total", "type": "quantitative"},
                 "color": {"field": "Rep", "type": "nominal"}
             }
-        });
+        };
+        vegaEmbed('#donutChart', donutChartSpec);
 
-        vegaEmbed("#correlation-view", {
+        // Correlation View
+        const correlationViewSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
-                "url": "HW_III.xlsx"
+                "url": "HW_III.csv"
             },
             "mark": "point",
-            "selection": {
-                "brush": {"type": "interval", "encodings": ["x"]}
-            },
             "encoding": {
                 "x": {"field": "Units", "type": "quantitative"},
                 "y": {"field": "Unit Cost", "type": "quantitative"}
+            },
+            "selection": {
+                "brush": {"type": "interval"}
             }
-        });
+        };
+        vegaEmbed('#correlationView', correlationViewSpec);
 
-        vegaEmbed("#streamgraph", {
+        // Streamgraph
+        const streamgraphSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
-                "url": "HW_III.xlsx"
+                "url": "HW_III.csv"
             },
-            "mark": {"type": "area", "interpolate": "monotone"},
+            "mark": "area",
             "encoding": {
                 "x": {"field": "OrderDate", "type": "temporal"},
                 "y": {"field": "Total", "type": "quantitative"},
                 "color": {"field": "Item", "type": "nominal"}
             }
-        });
+        };
+        vegaEmbed('#streamgraph', streamgraphSpec);
 
-        vegaEmbed("#histogram", {
+        // Histogram
+        const histogramSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "data": {
-                "url": "HW_III.xlsx"
+                "url": "HW_III.csv"
             },
             "mark": "bar",
             "encoding": {
-                "x": {"field": "Units", "type": "quantitative", "bin": true},
-                "y": {"field": "count()", "type": "quantitative"}
-            },
-            "layer": [
-                {
-                    "mark": "rule",
-                    "encoding": {
-                        "y": {"value": 0},
-                        "y2": {"field": "mean(Units)", "type": "quantitative"},
-                        "color": {"value": "red"}
-                    }
-                }
-            ]
-        });
+                "x": {"bin": true, "field": "Units", "type": "quantitative"},
+                "y": {"aggregate": "count", "type": "quantitative"}
+            }
+        };
+        vegaEmbed('#histogram', histogramSpec);
     </script>
 </body>
 </html>
